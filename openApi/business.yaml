@@ -1,12 +1,66 @@
 openapi: "3.0.2"
 info:
-  title: API Title
+  title: Shopping-List API
   version: "1.0"
 servers:
   - url: https://api.server.test/v1
+    variables:
+      port:
+        enum:
+          - '443'
+        default: '443'
 paths:
-  /test:
+  /user/{userId}:
     get:
+      tags:
+        - User Handling
+      description: Receive user information from the service
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user:
+    post:
+      tags:
+        - User Handling
+      description: Create a new user at the service
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: Created
+
+components:
+  schemas:
+    User:
+      type: object
+      description: The online user for operations
+      properties:
+        userId:
+          type: integer
+          format: int32
+          example: 12344
+        username:
+          type: string
+          example: "markus"
+        password:
+          type: string
+          format: byte
+          example: "secure as hell"
+        created:
+          type: string
+          format: date-time
+          example: "2024-08-09T19:37:21Z"
